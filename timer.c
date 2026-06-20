@@ -1,15 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdbool.h>
 
 // Clang Setup
 #pragma clang diagnostic push
-#include "clangFlags.h"
+#include "lib/clangFlags.h"
 
 // MiniAudio setup
 #define MINIAUDIO_IMPLEMENTATION
-#include "miniaudio.h"
+#include "lib/miniaudio.h"
+
+// Macros
+#define FOREVER 1
 
 // Error Macros
 #define ERROR_ARGS "Please Enter the hr:min:sec\n"
@@ -20,7 +22,6 @@
 // Main Entry
 int main(int argc, char **args)
 {
-    bool isTimeout = false;
     int hr, min, sec; 
 
     ma_result result; 
@@ -48,7 +49,7 @@ int main(int argc, char **args)
     }
 
     // Init the Sound from file 
-    result = ma_sound_init_from_file(pEngine, "sound.mp3", 0, NULL, NULL, &sound);
+    result = ma_sound_init_from_file(pEngine, "assets/sound.mp3", 0, NULL, NULL, &sound);
 
     // Handle Sound Init Errors 
     if (result != MA_SUCCESS)
@@ -70,32 +71,26 @@ int main(int argc, char **args)
     sec = atoi(args[3]);
 
     // Main Loop
-    while (!isTimeout)
+    while(FOREVER)
     {
-        if (sec == 0 && min != 0)
-        {
-            min--;
-            sec = 59;
-        }
-        else if (sec == 0 && min == 0 && hr != 0)
-        {
-            hr--;
-            min = 59;
-            sec = 59;
-        }
-        else sec--;
-    
-        // Wait for 1 second
-        sleep(1);
-
-        // Check for time out 
-        if (sec < 0)
-            break;
-        
         // Print the timer
         system("clear");
         printf("%02i : %02i : %02i\n", hr, min, sec);
+        
+        // Logic for time 
+        if (sec == 0 && min != 0)
+        {    min--; sec = 59;   }
 
+        else if (sec == 0 && min == 0 && hr != 0)
+        {   hr--; min = 59; sec = 59;   }
+        
+        else sec--;
+
+        // Check for time out 
+        if (sec < 0) break;
+
+        // Wait for 1 second
+        sleep(1);
     }
 
     // Player the Sound
