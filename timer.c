@@ -58,7 +58,7 @@ int main(int argc, char **args)
         exit(EXIT_FAILURE);
     }
 
-    // Handle arguments errors
+    // Handle Arguments errors
     if (argc < 4)
     {
         printf(ERROR_ARGS);
@@ -89,7 +89,6 @@ int main(int argc, char **args)
         // Check for time out 
         if (sec < 0) break;
 
-        // Wait for 1 second
         sleep(1);
     }
 
