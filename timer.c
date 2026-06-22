@@ -14,22 +14,25 @@
 #define FOREVER 1
 
 // Error Macros
-#define ERROR_ARGS "Please Enter the hr:min:sec\n"
-#define ENGINE_ALLOCATION_ERROR "Error: Can't Allocate MiniAudio Engine\n"
-#define ERROR_ENGINE_INIT "Error: Can't Init MiniAudio Engine\n"
-#define ERROR_SOUND_INIT "Error: Can't Init Sound from file\n"
+#define ERROR_ARGS "Please Enter the Hr:Min:Sec !\n"
+#define ENGINE_ALLOCATION_ERROR "Error: Can't Allocate MiniAudio Engine !\n"
+#define ERROR_ENGINE_INIT "Error: Can't Init MiniAudio Engine !\n"
+#define ERROR_SOUND_INIT "Error: Can't Init Sound from file !\n"
+#define ERROR_SOUND_START "Error: Can't Start Sound !\n"
+#define ERROR_SOUND_STOP "Error: Can't Stop Sound !\n"
 
 // Main Entry
 int main(int argc, char **args)
 {
-    int hr, min, sec; 
+    int hr, min, sec;
 
     ma_result result; 
-    ma_engine *pEngine;
-    ma_sound sound;
+    ma_engine *pEngine = NULL;
+    ma_sound *sound = NULL;
 
     // Allocate Memoery for the MiniAudio Engine
     pEngine = malloc(sizeof(ma_engine));
+    sound = malloc(sizeof(ma_sound));
 
     // Handle the Allocations Errors
     if (pEngine == NULL)
@@ -49,7 +52,7 @@ int main(int argc, char **args)
     }
 
     // Init the Sound from file 
-    result = ma_sound_init_from_file(pEngine, "assets/sound.mp3", 0, NULL, NULL, &sound);
+    result = ma_sound_init_from_file(pEngine, "assets/sound.mp3", MA_SOUND_FLAG_DECODE, NULL, NULL, sound);
 
     // Handle Sound Init Errors 
     if (result != MA_SUCCESS)
@@ -75,7 +78,7 @@ int main(int argc, char **args)
     {
         // Print the timer
         system("clear");
-        printf("%02i : %02i : %02i\n", hr, min, sec);
+        printf("%02d : %02d : %02d\n", hr, min, sec);
         
         // Logic for time 
         if (sec == 0 && min != 0)
@@ -92,17 +95,39 @@ int main(int argc, char **args)
         sleep(1);
     }
 
-    // Player the Sound
-    ma_sound_start(&sound);
+    // Set the looping of sound 
+    ma_sound_set_looping(sound, MA_TRUE);
 
-    // Wait for Enter to Press
+    // Player the Sound
+    result = ma_sound_start(sound);
+
+    // Handle Sound Start Error
+    if (result != MA_SUCCESS)
+    {
+        printf(ERROR_SOUND_START);
+        exit(EXIT_FAILURE);
+    }
+
+    // Wait for Enter Press
     getchar();
 
     // Stop Sound
-    ma_sound_stop(&sound);
+    result = ma_sound_stop(sound);
 
-    // Free the Engine
+    // Handle Sound Start Error
+    if (result != MA_SUCCESS)
+    {
+        printf(ERROR_SOUND_STOP);
+        exit(EXIT_FAILURE);
+    }
+
+    // Unint Engine and Sound
     ma_engine_uninit(pEngine);
+    ma_sound_uninit(sound);
+
+    // Free Structs
+    free(sound);
+    free(pEngine);
 
     return EXIT_SUCCESS;
 }
