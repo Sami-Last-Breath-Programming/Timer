@@ -20,6 +20,7 @@
 int main(int argc, char **args)
 {
     int hr, min, sec;
+    const char soundPath[] = "/home/lbs/Desktop/BackYard/Timer/assets/sound.mp3";
 
     ma_result result; 
     ma_engine *pEngine = NULL;
@@ -47,7 +48,7 @@ int main(int argc, char **args)
     }
 
     // Init the Sound from file 
-    result = ma_sound_init_from_file(pEngine, "assets/sound.mp3", MA_SOUND_FLAG_DECODE, NULL, NULL, sound);
+    result = ma_sound_init_from_file(pEngine, soundPath, MA_SOUND_FLAG_DECODE, NULL, NULL, sound);
 
     // Handle Sound Init Errors 
     if (result != MA_SUCCESS)
