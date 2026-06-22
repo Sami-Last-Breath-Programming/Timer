@@ -20,7 +20,7 @@
 int main(int argc, char **args)
 {
     int hr, min, sec;
-    const char soundPath[] = "/home/lbs/Desktop/BackYard/Timer/assets/sound.mp3";
+    const char soundPath[] = "/home/lbs/Programs/Timer/assets/sound.mp3";
 
     ma_result result; 
     ma_engine *pEngine = NULL;
