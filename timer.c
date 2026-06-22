@@ -11,7 +11,7 @@
 #include "lib/miniaudio.h"
 
 // Errors Setup 
-#include "errorsTimer.h"
+#include "lib/errorsTimer.h"
 
 // Macros
 #define FOREVER 1
