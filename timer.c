@@ -26,6 +26,13 @@ int main(int argc, char **args)
     ma_engine *pEngine = NULL;
     ma_sound *sound = NULL;
 
+    // Handle Arguments errors
+    if (argc < 4)
+    {
+        printf(ERROR_ARGS);
+        exit(EXIT_FAILURE);
+    }
+
     // Allocate Memoery for the MiniAudio Engine
     pEngine = malloc(sizeof(ma_engine));
     sound = malloc(sizeof(ma_sound));
@@ -57,13 +64,6 @@ int main(int argc, char **args)
         exit(EXIT_FAILURE);
     }
 
-    // Handle Arguments errors
-    if (argc < 4)
-    {
-        printf(ERROR_ARGS);
-        exit(EXIT_FAILURE);
-    }
-
     // Assign Arguments
     hr = atoi(args[1]);
     min = atoi(args[2]);
@@ -75,6 +75,14 @@ int main(int argc, char **args)
         // Print the timer
         system("clear");
         printf("%02d : %02d : %02d\n", hr, min, sec);
+        
+        // Logic for zero
+        if (hr == 0 && min == 0 && sec == 0)
+        {
+            // Sleep for 1 second
+            sleep(1);
+            break;
+        }
         
         // Logic for time 
         if (sec == 0 && min != 0)
@@ -118,8 +126,8 @@ int main(int argc, char **args)
     }
 
     // Unint Engine and Sound
-    ma_engine_uninit(pEngine);
     ma_sound_uninit(sound);
+    ma_engine_uninit(pEngine);
 
     // Free Structs
     free(sound);
